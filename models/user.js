@@ -15,49 +15,37 @@ class User extends Model {
 
 User.init(
   {
-    name: {
+    fullname: {
       type: DataTypes.STRING,
       allowNull: false,
       trim: true,
       validate: {
         notNull: { 
-          msg: "required" 
+          msg: "name required" 
         },
         notEmpty: {
-          msg: 'cannot be empty',
-        },
-      },
-    },
-    lastname: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      trim: true,
-      validate: {
-        notNull: { msg: "required" },
-        notEmpty: {
-          msg: 'cannot be empty',
+          msg: 'name cannot be empty',
         },
       },
     },
     username: {
-      type:DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: true,
+      trim: true
+    },
+    birtdate: {
+      type: DataTypes.DATE,
+      allowNull: true,
       trim: true,
-      validate: {
-        notNull: { msg: "required" },
-        notEmpty: {
-          msg: 'cannot be empty',
-        },
-      },
     },
     password: {
       type:DataTypes.STRING,
       allowNull: false,
       trim: true,
       validate: {
-        notNull: { msg: "required" },
+        notNull: { msg: "password required" },
         notEmpty: {
-          msg: 'cannot be empty',
+          msg: 'password cannot be empty',
         },
       },
     },
@@ -65,19 +53,21 @@ User.init(
       type:DataTypes.STRING,
       allowNull: false,
       trim: true,
+      unique: true,
       validate: {
         notNull: { 
-          msg: "required" 
+          msg: "email required" 
         },
         notEmpty: {
-          msg: 'cannot be empty',
+          msg: 'email cannot be empty',
         },
         isEmail: {
           msg: 'Email address is not valid',
         },
       },
     },
-    is_delete: DataTypes.BOOLEAN
+    is_delete: DataTypes.BOOLEAN,
+    lastLoginDate: DataTypes.DATE
   },
   {
     sequelize,

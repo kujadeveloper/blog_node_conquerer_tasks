@@ -7,10 +7,11 @@ exports.authenticateToken = (req, res, next) => {
   if (token == null) {
     return res.status(401).json({ error: 'Authentication token is missing' });
   }
-
+  console.log(req.userId)
   try {
     const decodedToken = jwt.verifyToken(token);
     req.userId = decodedToken.userId;
+    req.lastLoginDate = decodedToken.lastLoginDate;
     next();
   } catch (error) {
     console.error(error);

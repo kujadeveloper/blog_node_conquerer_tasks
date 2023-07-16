@@ -13,12 +13,42 @@ BlogPost.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'user', // Name of the referenced model
+        model: 'User', // Name of the referenced model
         key: 'id', // Primary key of the referenced model
       },
+      validate: {
+        notNull: { 
+          msg: "userId required" 
+        },
+        notEmpty: {
+          msg: 'userId cannot be empty',
+        },
+      },
     },
-    title: DataTypes.STRING,
-    content: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: { 
+          msg: "title required" 
+        },
+        notEmpty: {
+          msg: 'title cannot be empty',
+        },
+      },
+    },
+    content: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: { 
+          msg: "content required" 
+        },
+        notEmpty: {
+          msg: 'content cannot be empty',
+        },
+      },
+    },
     is_delete: DataTypes.BOOLEAN
   },
   {

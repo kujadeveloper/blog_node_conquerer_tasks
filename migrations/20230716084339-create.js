@@ -9,17 +9,17 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      lastname: {
+      fullname: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       username: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
+      },
+      birtdate: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
       password: {
         type: Sequelize.STRING,
@@ -44,6 +44,43 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
+      lastLoginDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
+
+    await queryInterface.createTable('category', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: {
+        type:Sequelize.STRING,
+        allowNull: false
+      },
+      is_delete: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      lastLoginDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
     });
 
     await queryInterface.createTable('blogs', {
@@ -52,7 +89,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -93,7 +130,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      blog_id: {
+      blogId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -103,7 +140,7 @@ module.exports = {
         onUpdate: 'CASCADE', // Define the update behavior (optional)
         onDelete: 'CASCADE',
       },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -112,10 +149,6 @@ module.exports = {
         },
         onUpdate: 'CASCADE', // Define the update behavior (optional)
         onDelete: 'CASCADE',
-      },
-      title: {
-        type: Sequelize.STRING,
-        allowNull: false,
       },
       content: {
         type: Sequelize.STRING,
@@ -135,7 +168,8 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      },
+      }
+
     });
   },
 

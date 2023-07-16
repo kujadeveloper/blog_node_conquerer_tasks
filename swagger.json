@@ -15,16 +15,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "lastname": {
+                  "fullname": {
                     "type": "string"
                   },
                   "email": {
-                    "type": "string"
-                  },
-                  "username": {
                     "type": "string"
                   },
                   "password": {
@@ -32,9 +26,15 @@
                   },
                   "repassword": {
                     "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "birtdate": {
+                    "type": "string"
                   }
                 },
-                "required": ["username", "password","email", "name", "lastname","repassword"]
+                "required": ["password","email", "fullname", "repassword"]
               }
             }
           }
@@ -73,7 +73,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "username": {
+                  "email": {
                     "type": "string"
                   },
                   "password": {
@@ -165,6 +165,22 @@
       },
       "get": {
         "summary": "Tüm blog yazılarını getirme",
+        "parameters": [
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Başarılı yanıt",
@@ -350,6 +366,20 @@
             "name": "blogPostId",
             "in": "path",
             "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
             "schema": {
               "type": "integer"
             }
