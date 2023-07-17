@@ -38,3 +38,65 @@ exports.getCategory = async (req, res) => {
     res.status(500).json(response.error(error));
   }
 };
+
+
+exports.getUserBloger = async (req, res) => {
+  try {
+
+    let { body } = await client.search({
+      index: 'posts',
+      body: {
+        size: 0,
+        aggs: {
+          total_users: {
+            value_count: {
+              field: 'profile.username.keyword',
+            },
+          },
+          bloggers: {
+            filter: {
+              exists: {
+                field: 'title',
+              },
+            },
+            aggs: {
+              blogger_count: {
+                cardinality: {
+                  field: 'profile.username.keyword',
+                },
+              },
+            },
+          },
+          readers: {
+            filter: {
+              bool: {
+                must_not: [
+                  { exists: { field: 'title' } },
+                ],
+              },
+            },
+            aggs: {
+              reader_count: {
+                cardinality: {
+                  field: 'profile.username.keyword',
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const totalUsers = body.aggregations.total_users.value;
+    const bloggerCount = body.aggregations.bloggers.blogger_count.value;
+    const readerCount = body.aggregations.readers.reader_count.value;
+
+    body = await client.count({ index:'user'});
+    console.log(body.body.count)
+
+    res.status(200).json(response.getAll({total:body.body.count, blogger:bloggerCount, reader:body.body.count-bloggerCount}));
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(response.error(error));
+  }
+};

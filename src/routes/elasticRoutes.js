@@ -5,6 +5,7 @@ const { authenticateToken } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.get('/category-rates-all', elasticSearchController.getCategory);
+router.get('/user-static', elasticSearchController.getUserBloger);
 
 
 module.exports = router;
