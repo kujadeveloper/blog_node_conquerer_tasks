@@ -2,6 +2,6 @@
 Blog conquerer tasks
 
 # HOW to start
-cd blog_node_conquerer_tasks
-docker-compose up -d
+cd blog_node_conquerer_tasks <br>
+docker-compose up -d <br>
 get http://localhost:3000/api-docs/
