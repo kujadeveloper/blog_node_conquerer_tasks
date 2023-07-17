@@ -56,12 +56,23 @@ exports.updatePass = async (req, res) => {
   const { userId } = req;
 
   try {
+
+    if(password!=repassword){
+      return res.status(409).json(response.error('Your password does not match'));
+    }
+
+    const isValid = User.validatePassword(password);
+    if (!isValid) {
+      return res.status(409).json(response.error('Password is not valid'));
+    }
+
     const is_user = await User.findOne({ where: {id:userId, is_delete:false} });
     if (!is_user) {
       return res.status(401).json(response.error('invalid user'));
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const resp = await resp.update({fullname:fullname, birtdate:birtdate, username:username})
+    const resp = await is_user.update({password: hashedPassword})
     res.status(200).json(response.success('ok',resp));
   } catch (error) {
     console.error(error);
