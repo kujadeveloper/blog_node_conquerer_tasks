@@ -1,9 +1,13 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const User = require('./user'); 
+const Comments = require('./comments'); 
+const Category = require('./category'); 
 
 class BlogPost extends Model {
   static associate(models) {
-    BlogPost.belongsTo(models.User, { foreignKey: 'userId' });
+    this.belongsTo(User, { foreignKey: 'userId', as:'User' });
+    this.belongsTo(models.Category, { foreignKey: 'categoryId', as:'Category' });
   }
 }
 
@@ -22,6 +26,22 @@ BlogPost.init(
         },
         notEmpty: {
           msg: 'userId cannot be empty',
+        },
+      },
+    },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Category', // Name of the referenced model
+        key: 'id', // Primary key of the referenced model
+      },
+      validate: {
+        notNull: { 
+          msg: "categoryId required" 
+        },
+        notEmpty: {
+          msg: 'categoryId cannot be empty',
         },
       },
     },
@@ -57,5 +77,7 @@ BlogPost.init(
     tableName: 'blogs',
   }
 );
-
+BlogPost.User = BlogPost.belongsTo(User, { foreignKey: 'userId' });
+BlogPost.Category = BlogPost.belongsTo(Category, { foreignKey: 'categoryId' });
+BlogPost.Comments = BlogPost.hasMany(Comments, { foreignKey: 'blogId' });
 module.exports = BlogPost;

@@ -99,6 +99,16 @@ module.exports = {
         onUpdate: 'CASCADE', // Define the update behavior (optional)
         onDelete: 'CASCADE',
       },
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'category', // Name of the referenced model
+          key: 'id', // Primary key of the referenced model
+        },
+        onUpdate: 'CASCADE', // Define the update behavior (optional)
+        onDelete: 'CASCADE',
+      },
       title: {
         type: Sequelize.STRING,
         allowNull: false,

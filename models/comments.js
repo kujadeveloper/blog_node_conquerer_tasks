@@ -1,10 +1,11 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const User = require('./user'); 
 
 class Comments extends Model {
   static associate(models) {
-    Comments.belongsTo(models.User, { foreignKey: 'userId' });
-    Comments.belongsTo(models.BlogPost, { foreignKey: 'blogId' });
+    Comments.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    Comments.belongsTo(models.BlogPost, { foreignKey: 'blogId', as: 'blogPost' });
   }
 }
 
@@ -36,4 +37,6 @@ Comments.init(
   }
 );
 
+
+Comments.User = Comments.belongsTo(User, { foreignKey: 'userId' });
 module.exports = Comments;

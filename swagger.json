@@ -8,7 +8,8 @@
   "paths": {
     "/auth/register": {
       "post": {
-        "summary": "Yeni kullanıcı kaydı",
+        "summary": "Create a new user",
+        "description": " Create a new user.<br>  Email field uniq,<br> Password min 8 character and requriment special char and number. ",
         "requestBody": {
           "content": {
             "application/json": {
@@ -34,7 +35,12 @@
                     "type": "string"
                   }
                 },
-                "required": ["password","email", "fullname", "repassword"]
+                "required": [
+                  "password",
+                  "email",
+                  "fullname",
+                  "repassword"
+                ]
               }
             }
           }
@@ -66,7 +72,8 @@
     },
     "/auth/login": {
       "post": {
-        "summary": "Kullanıcı girişi",
+        "summary": "Login user",
+        "description": " Get jwt token expire 1h. ",
         "requestBody": {
           "content": {
             "application/json": {
@@ -80,7 +87,10 @@
                     "type": "string"
                   }
                 },
-                "required": ["username", "password"]
+                "required": [
+                  "username",
+                  "password"
+                ]
               }
             }
           }
@@ -112,7 +122,7 @@
     },
     "/api/blog-posts": {
       "post": {
-        "summary": "Yeni blog yazısı oluşturma",
+        "summary": "Creating a new blog post",
         "security": [
           {
             "BearerAuth": []
@@ -124,6 +134,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "categoryId": {
+                    "type": "integer"
+                  },
                   "title": {
                     "type": "string"
                   },
@@ -131,7 +144,11 @@
                     "type": "string"
                   }
                 },
-                "required": ["title", "content"]
+                "required": [
+                  "title",
+                  "content",
+                  "categoryId"
+                ]
               }
             }
           }
@@ -164,7 +181,79 @@
         }
       },
       "get": {
-        "summary": "Tüm blog yazılarını getirme",
+        "summary": "All blog lists",
+        "description": " categoryId empty or 0 send all category list <br> If search is sent, title::like search. <br> If pageSize is sent, list count change defaultValue(10) <br> If page is sent, change page defaultValue(1) <br> If order is sent, change order defaultValue('createdAt,DESC'), example 'fieldname,DESC or ASC' ",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Sunucu hatası"
+          }
+        }
+      }
+    },
+    "/api/category": {
+      "get": {
+        "summary": "Category list",
         "parameters": [
           {
             "name": "pageSize",
@@ -178,6 +267,90 @@
             "in": "query",
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Sunucu hatası"
+          }
+        }
+      }
+    },
+    "/api/my-blog-posts": {
+      "get": {
+        "summary": "User blog list",
+        "description": " categoryId empty or 0 send all category list <br> If search is sent, title::like search. <br> If pageSize is sent, list count change defaultValue(10) <br> If page is sent, change page defaultValue(1) <br> If order is sent, change order defaultValue('createdAt,DESC'), example 'fieldname,DESC or ASC' ",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -214,7 +387,7 @@
     },
     "/api/blog-posts/{blogPostId}": {
       "put": {
-        "summary": "Blog yazısı güncelleme",
+        "summary": "Blog update",
         "security": [
           {
             "BearerAuth": []
@@ -243,7 +416,10 @@
                     "type": "string"
                   }
                 },
-                "required": ["title", "content"]
+                "required": [
+                  "title",
+                  "content"
+                ]
               }
             }
           }
@@ -276,7 +452,7 @@
         }
       },
       "delete": {
-        "summary": "Blog yazısı silme",
+        "summary": "Blog delete",
         "security": [
           {
             "BearerAuth": []
@@ -304,7 +480,7 @@
     },
     "/api/blog-posts/{blogPostId}/comments": {
       "post": {
-        "summary": "Yeni yorum oluşturma",
+        "summary": "Create a new comments",
         "security": [
           {
             "BearerAuth": []
@@ -330,7 +506,9 @@
                     "type": "string"
                   }
                 },
-                "required": ["content"]
+                "required": [
+                  "content"
+                ]
               }
             }
           }
@@ -360,7 +538,7 @@
         }
       },
       "get": {
-        "summary": "Blog yazısının yorumlarını getirme",
+        "summary": "Fetch comments for a blog post",
         "parameters": [
           {
             "name": "blogPostId",
@@ -382,6 +560,80 @@
             "in": "query",
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Sunucu hatası"
+          }
+        }
+      }
+    },
+    "/api/blog-posts/{blogPostId}/my-comments": {
+      "get": {
+        "summary": "User Fetch comments for a blog post",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "blogPostId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],

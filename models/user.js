@@ -4,6 +4,8 @@ const sequelize = require('../config/database');
 class User extends Model {
 
   static associate(models) {
+    this.hasMany(models.BlogPost, { foreignKey: 'userId', as: 'blogs' });
+    this.hasMany(models.Comments, { foreignKey: 'userId', as: 'comments' });
   }
 
   static validatePassword(password) {

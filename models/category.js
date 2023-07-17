@@ -9,15 +9,13 @@ class Category extends Model {
 
 Category.init(
   {
-    name: {
-      type: DataTypes.String,
-      allowNull: false,
-      is_delete: DataTypes.BOOLEAN
+    name: DataTypes.STRING,
+    is_delete: DataTypes.BOOLEAN
   },
   {
     sequelize,
     modelName: 'Category',
-    tableName: 'Category',
+    tableName: 'category',
   }
 );
 

@@ -10,7 +10,7 @@ exports.authenticateToken = (req, res, next) => {
   console.log(req.userId)
   try {
     const decodedToken = jwt.verifyToken(token);
-    req.userId = decodedToken.userId;
+    req.userId = decodedToken.id;
     req.lastLoginDate = decodedToken.lastLoginDate;
     next();
   } catch (error) {
