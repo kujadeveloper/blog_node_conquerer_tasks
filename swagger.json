@@ -868,6 +868,48 @@
           }
         }
       }
+    },
+    "/elastic/range": {
+      "get": {
+        "summary": "Call elastic range",
+        "description": "timerange: week, month, year",
+        "parameters": [
+          {
+            "name": "timerange",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı yanıt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Sunucu hatası"
+          }
+        }
+      }
     }
   },
   "components": {

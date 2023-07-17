@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/category-rates-all', elasticSearchController.getCategory);
 router.get('/user-static', elasticSearchController.getUserBloger);
-
+router.get('/range', elasticSearchController.getByrange);
 
 module.exports = router;

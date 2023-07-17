@@ -100,3 +100,75 @@ exports.getUserBloger = async (req, res) => {
     res.status(500).json(response.error(error));
   }
 };
+
+
+
+
+
+exports.getByrange= async (req, res) => {
+  const {timerange } = req.query;
+  try {
+    let interval, format, minRange;
+    const maxRange = "now/d";
+
+    switch (timerange) {
+      case "week":
+        interval = "day";
+        format = "yyyy-MM-dd";
+        minRange = "now-7d/d";
+        break;
+      case "month":
+        interval = "week";
+        format = "yyyy-MM-dd";
+        minRange = "now-30d/d";
+        break;
+      case "year":
+        interval = "month";
+        format = "yyyy-MM";
+        minRange = "now-365d/d";
+        break;
+      default:
+        throw new Error("Invalid time range specified.");
+    }
+
+    const { body } = await client.search({
+      index: "posts",
+      body: {
+        size: 0,
+        aggs: {
+          time_range_distribution: {
+            date_histogram: {
+              field: "createdAt",
+              calendar_interval: interval,
+              format: format,
+              extended_bounds: {
+                min: minRange,
+                max: maxRange
+              }
+            },
+            aggs: {
+              category_distribution: {
+                terms: {
+                  field: "category.keyword",
+                  size: 10
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const distributionBuckets = body.aggregations.time_range_distribution.buckets;
+    distributionBuckets.forEach(bucket => {
+      console.log(`Date: ${bucket.key_as_string}`);
+      bucket.category_distribution.buckets.forEach(categoryBucket => {
+        console.log(`- Category: ${categoryBucket.key}, Count: ${categoryBucket.doc_count}`);
+      });
+    });
+    res.status(200).json(response.getAll(distributionBuckets));
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(response.error(error));
+  }
+};
