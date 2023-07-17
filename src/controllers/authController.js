@@ -51,6 +51,25 @@ exports.update = async (req, res) => {
 };
 
 
+exports.delete = async (req, res) => {
+  const { userId } = req;
+
+  try {
+    const is_user = await User.findOne({ where: {id:userId, is_delete:false} });
+    if (!is_user) {
+      return res.status(401).json(response.error('invalid user'));
+    }
+
+    const resp = await is_user.update({is_delete:true})
+    res.status(200).json(response.success('ok',resp));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(response.error('An error occurred'));
+  }
+};
+
+
+
 exports.updatePass = async (req, res) => {
   const { password, repassword} = req.body;
   const { userId } = req;

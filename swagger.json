@@ -120,7 +120,7 @@
         }
       }
     },
-    "/auth/update-me": {
+    "/auth/user": {
       "put": {
         "summary": "Update me",
         "security": [
@@ -170,6 +170,37 @@
           },
           "401": {
             "description": "Geçersiz şifre"
+          },
+          "500": {
+            "description": "Sunucu hatası"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete me",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Geçersiz işlem"
           },
           "500": {
             "description": "Sunucu hatası"
