@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('../utils/jwt');
 const response = require('../utils/response');
 const User = require('../../models/user'); 
+const BlogPost = require('../../models/blogpost'); 
+const Comments = require('../../models/comments'); 
 
 exports.register = async (req, res) => {
   const { password, repassword, fullname, email } = req.body;
@@ -61,6 +63,17 @@ exports.delete = async (req, res) => {
     }
 
     const resp = await is_user.update({is_delete:true})
+
+
+    await Comments.update({is_delete:true}, {
+      where: {userId: userId, is_delete:false}
+    });
+
+    await BlogPost.update({is_delete:true}, {
+      where: {userId: userId, is_delete:false}
+    });
+
+
     res.status(200).json(response.success('ok',resp));
   } catch (error) {
     console.error(error);
