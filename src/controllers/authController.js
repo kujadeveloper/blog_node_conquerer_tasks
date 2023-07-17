@@ -42,7 +42,7 @@ exports.update = async (req, res) => {
       return res.status(401).json(response.error('invalid user'));
     }
 
-    const resp = await user.update({fullname:fullname, birtdate:birtdate, fullname:username})
+    const resp = await is_user.update({fullname:fullname, birtdate:birtdate, fullname:username})
     res.status(200).json(response.success('ok',resp));
   } catch (error) {
     console.error(error);
